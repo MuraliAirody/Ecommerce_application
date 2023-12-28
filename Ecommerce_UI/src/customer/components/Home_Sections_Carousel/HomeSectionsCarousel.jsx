@@ -46,15 +46,18 @@ function HomeSectionsCarousel() {
         
           items={items}
           disableDotsControls
-          disableButtonsControls
+          // disableButtonsControls
+          infinite
           responsive={responsive}
           activeIndex={activeIndex}
           onSlideChanged={(e) => {
             syncActiveIndex(e)
             console.log(e)
         }}
+        autoPlay
+        autoPlayInterval={2000}
         />
-        {activeIndex != items.length - 5 && (
+        
           <Button
             onClick={slideNext}
             variant="contained"
@@ -72,8 +75,7 @@ function HomeSectionsCarousel() {
               sx={{ color: "black", transform: "rotate(90deg)" }}
             />
           </Button>
-        )}
-        {activeIndex != 0 && (
+      
           <Button
             onClick={slidePrev}
             variant="contained"
@@ -91,7 +93,7 @@ function HomeSectionsCarousel() {
               sx={{ color: "black", transform: "rotate(90deg)" }}
             />
           </Button>
-        )}
+        
       </div>
     </div>
   );
