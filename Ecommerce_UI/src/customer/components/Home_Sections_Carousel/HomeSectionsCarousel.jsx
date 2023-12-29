@@ -3,44 +3,45 @@ import HomeSectionCard from "../Home_Section_Crad/HomeSectionCard";
 import AliceCarousel from "react-alice-carousel";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { Button } from "@mui/material";
-import { mens_kurta } from "../../../Data/Mens/mens_kurta";
 import "react-alice-carousel/lib/alice-carousel.css";
 
-function HomeSectionsCarousel() {
+function HomeSectionsCarousel({data,sectionName}) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const responsive = {
-    0: { items: 2 },
-    568: { items: 3 },
+    0: { items: 1 },
+    500: { items: 2},
+    830: { items: 3 },
     1024: { items: 5 },
   };
 
   const slidePrev = () => {
-    console.log("Previous button clicked");
+    // console.log("Previous button clicked");
 
     setActiveIndex(activeIndex - 1);
     // console.log(activeIndex);
   };
   const slideNext = () => {
-    console.log("Next button clicked");
+    // console.log("Next button clicked");
 
     setActiveIndex(activeIndex + 1);
     // console.log(activeIndex);
   };
 
   const syncActiveIndex = (e) => {
-    console.log(e);
+    // console.log(e);
     setActiveIndex(e.item);
   };
 
 
 
-  const items = mens_kurta
+  const items = data
     .slice(0, 10)
     .map((item) => <HomeSectionCard product={item} />);
 
   return (
     <div className="relative">
+      <h2 className="text-2xl font-extrabold text-gray-950 py-5">{sectionName}</h2>
       <div className="relative p-5">
         <AliceCarousel
         
@@ -52,7 +53,7 @@ function HomeSectionsCarousel() {
           activeIndex={activeIndex}
           onSlideChanged={(e) => {
             syncActiveIndex(e)
-            console.log(e)
+            // console.log(e)
         }}
         autoPlay
         autoPlayInterval={2000}
