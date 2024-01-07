@@ -1,6 +1,7 @@
 
 import "./App.css";
 import Navigation from "./customer/components/Navigation/Navigation";
+import Product from "./customer/components/Product/Product";
 import Home from "./customer/pages/Home";
 
 function App() {
@@ -11,7 +12,8 @@ function App() {
         <Navigation></Navigation>
       </div>
       <div>
-        <Home></Home>
+        {/* <Home></Home> */}
+        <Product/>
       </div>
     </>
   );
