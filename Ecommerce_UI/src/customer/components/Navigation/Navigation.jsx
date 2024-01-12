@@ -9,6 +9,7 @@ import {
 import { Avatar, Button, Menu, MenuItem } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
 import { navigation } from "../../../Data/Navigation/navigationData";
+import { useNavigate } from "react-router-dom";
 
 
 function classNames(...classes) {
@@ -17,7 +18,8 @@ function classNames(...classes) {
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
-  
+  const navig = useNavigate()
+
   const [openAuthModel,setOpenAuthModel] = useState(false)
   const [anchorEl,setAnchorEl] = useState(null)
   const openUserMenu = Boolean(anchorEl)
@@ -37,7 +39,7 @@ export default function Navigation() {
   }
 
   const handleCategoryClick=(category,section,item,close)=>{
-    // navigate(`/${category.id}/${section.id}/${item.id}`);
+    navig(`/${category.id}/${section.id}/${item.id}`);
     close();
   }
   return (
@@ -244,6 +246,7 @@ export default function Navigation() {
                 <a href="#">
                   <span className="sr-only">Your Company</span>
                   <img
+                    onClick={()=> navig("/")}
                     className="h-8 w-8 mr-2"
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                     alt=""
@@ -393,7 +396,6 @@ export default function Navigation() {
                       aria-controls={open ? "basic-menu" : undefined}
                       aria-haspopup="true"
                       aria-expanded={open ? "true" : undefined}
-                      // onclick={handleUserClick}
                       sx={{
                         bgcolor: deepPurple[500],
                         color: "white",
@@ -406,13 +408,13 @@ export default function Navigation() {
                       id="basic-menu"
                       anchorEl={anchorEl}
                       open={openUserMenu}
-                      close={handleCloseUserMenu}
+                      // close={handleCloseUserMenu}
                       MenuListProps={{
                         "aria-labelledby": "basic-button",
                       }}
                     >
                       <MenuItem onClick={handleCloseUserMenu}>Profile</MenuItem>
-                      <MenuItem>My Orders</MenuItem>
+                      <MenuItem onClick={()=>{navig("/account/order");handleCloseUserMenu}}>My Orders</MenuItem>
                       <MenuItem>Logout</MenuItem>
                     </Menu>
                   </div>
@@ -441,6 +443,7 @@ export default function Navigation() {
                 <div className="ml-4 flow-root lg:ml-6">
                   <a href="#" className="group -m-2 flex items-center p-2">
                     <ShoppingBagIcon
+                      onClick={()=>navig("/cart")}
                       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
                     />

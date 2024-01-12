@@ -1,13 +1,19 @@
 import React from "react";
 import CartItem from "./CartItem";
 import { Button, Divider } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
+  const navigate = useNavigate()
+  function handleCheckout(){
+    navigate("/checkout?step=2")
+  }
+
   return (
     <div>
       <div className="lg:grid grid-cols-3 lg:px-16 relative">
         <div className="col-span-2">
-          {[1,1,1].map((item)=><CartItem />)}
+          {[1,1,1].map((item,index)=><CartItem key={index}/>)}
         </div>
         <div className="px-5 sticky top-0 h-[100vh] mt-5 lg:mt-0">
           <div className="border p-4 mb-2">
@@ -36,6 +42,7 @@ function Cart() {
               sx={{ bgcolor: "#32CD32", color: "black" }}
               variant="contained"
               color="success"
+              onClick={handleCheckout}
             >
               Checkout
             </Button>{" "}

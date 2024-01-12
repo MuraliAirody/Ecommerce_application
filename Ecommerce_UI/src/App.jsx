@@ -3,19 +3,14 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
 
 import Root from "./Root";
+import CustomerRouter from "./Routes/CustomerRouter";
 
 function App() {
 
-  const router = createBrowserRouter([
-    {
-      path:'/',
-      element:<Root/>
-    }
-  ])
 
   return (
     <>
-      <RouterProvider router={router}/>
+      <CustomerRouter/>
     </>
   );
 }

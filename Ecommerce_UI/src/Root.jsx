@@ -6,6 +6,9 @@ import Navigation from "./customer/components/Navigation/Navigation";
 import Product from "./customer/components/Product/Product";
 import ProductDetails from "./customer/components/ProductDetails/ProductDetails";
 import Home from "./customer/pages/Home";
+import Order from './customer/components/Order/Order';
+import OrderDetail from './customer/components/Order/OrderDetail';
+import { Outlet } from 'react-router-dom';
 
 function Root() {
   return (
@@ -14,11 +17,7 @@ function Root() {
         <Navigation></Navigation>
       </div>
       <div>
-        {/* <Home></Home> */}
-        {/* <Product/> */}
-        {/* <ProductDetails/> */}
-        {/* <Cart/> */}
-        <Checkout/>
+        <Outlet></Outlet>
       </div>
       <div>
         <Footer></Footer>
