@@ -5,6 +5,7 @@ import com.ecommerce.configuration.UserDetailService;
 import com.ecommerce.dao.UserDao;
 import com.ecommerce.exception.UserException;
 import com.ecommerce.models.User;
+import com.ecommerce.request.LoginRequest;
 import com.ecommerce.response.AuthResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,11 +113,11 @@ public class UserServiceImpl implements UserService {
     }
 //======================================================================================================
     @Override
-    public ResponseEntity<AuthResponse> signIn(Map<String, String> requestMap) {
+    public ResponseEntity<AuthResponse> signIn(LoginRequest loginRequest) {
         log.info("inside login");
         try {
             Authentication auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(requestMap.get("email"), requestMap.get("password"))
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
             );
             log.info("is authenticated{}",auth.isAuthenticated());
             if (auth.isAuthenticated()) {

@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import com.ecommerce.exception.UserException;
 import com.ecommerce.models.User;
+import com.ecommerce.request.LoginRequest;
 import com.ecommerce.response.AuthResponse;
 import org.springframework.http.ResponseEntity;
 
@@ -13,5 +14,5 @@ public interface UserService {
 
     ResponseEntity<AuthResponse> signup(Map<String, String> requestMap);
 
-    ResponseEntity<AuthResponse> signIn(Map<String, String> requestMap);
+    ResponseEntity<AuthResponse> signIn(LoginRequest loginRequest);
 }

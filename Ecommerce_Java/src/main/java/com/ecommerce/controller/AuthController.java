@@ -1,5 +1,6 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.request.LoginRequest;
 import com.ecommerce.response.AuthResponse;
 import com.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> signIn(@RequestBody Map<String,String>requestMap){
+    public ResponseEntity<AuthResponse> signIn(@RequestBody LoginRequest loginRequest){
         try {
-            return userService.signIn(requestMap);
+            return userService.signIn(loginRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
