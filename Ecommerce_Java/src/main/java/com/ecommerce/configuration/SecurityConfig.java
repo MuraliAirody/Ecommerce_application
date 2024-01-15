@@ -42,6 +42,11 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        log.info("authenticationManager()..");
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+    @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         log.info("daoAuthenticationProvider()..");
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
