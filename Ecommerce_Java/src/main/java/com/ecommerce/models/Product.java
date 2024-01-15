@@ -42,7 +42,7 @@ public class Product {
     @Column(name = "discounted_price")
     private int discountedPrice;
 
-    @Column(name = "discount_persent")
+    @Column(name = "discount_percent")
     private int discountPercent;
 
     @Column(name = "quantity")
@@ -75,4 +75,7 @@ public class Product {
     @ManyToOne()
     @JoinColumn(name = "category_id")
     private Category category;
+
+    private LocalDateTime createdAt;
+
 }
