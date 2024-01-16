@@ -18,7 +18,7 @@ public class OrderServiceImpl implements  OrderService{
     OrderDao orderDao;
 
     @Override
-    public Order createOrder(User user, Address shippingAdress) {
+    public Order createOrder(User user, Address shippingAddress) {
         return null;
     }
 

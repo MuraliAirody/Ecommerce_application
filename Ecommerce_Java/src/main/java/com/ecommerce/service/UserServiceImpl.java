@@ -1,5 +1,6 @@
 package com.ecommerce.service;
 
+import com.ecommerce.configuration.JwtFilter;
 import com.ecommerce.configuration.JwtUtils;
 import com.ecommerce.configuration.UserDetailService;
 import com.ecommerce.dao.UserDao;
@@ -39,6 +40,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    JwtFilter jwtFilter;
 
     @Override
     public User findUserById(Long userId) throws UserException {
@@ -54,8 +57,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserProfileByJwt(String jwt) throws UserException {
         log.info("user service");
-        String email=jwtUtils.extractUsername(jwt);
-
+//        String email= jwtFilter.getCurrentUser();
+          String email = jwtUtils.extractUsername(jwt.substring(7));
         log.info("email"+email);
 
         User user=userDao.findByEmail(email);
