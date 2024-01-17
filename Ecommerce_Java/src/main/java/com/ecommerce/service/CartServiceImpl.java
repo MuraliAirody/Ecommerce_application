@@ -7,10 +7,12 @@ import com.ecommerce.models.CartItem;
 import com.ecommerce.models.Product;
 import com.ecommerce.models.User;
 import com.ecommerce.request.AddItemRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class CartServiceImpl implements CartService {
     @Autowired
     CartDao cartDao;
@@ -46,6 +48,7 @@ public class CartServiceImpl implements CartService {
             cartItem.setSize(req.getSize());
 
             CartItem createdCartItem=cartItemService.createCartItem(cartItem);
+            log.info("created cart item {}",createdCartItem);
             cart.getCartItems().add(createdCartItem);
         }
 
@@ -56,6 +59,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart findUserCart(Long userId) {
         Cart cart =	cartDao.findByUserId(userId);
+        log.info("cart {}",cart);
         int totalPrice=0;
         int totalDiscountedPrice=0;
         int totalItem=0;
@@ -64,7 +68,7 @@ public class CartServiceImpl implements CartService {
             totalDiscountedPrice+=cartsItem.getDiscountedPrice();
             totalItem+=cartsItem.getQuantity();
         }
-
+        log.info("cart items {}",cart.getCartItems());
         cart.setTotalPrice(totalPrice);
         cart.setTotalItem(cart.getCartItems().size());
         cart.setTotalDiscountedPrice(totalDiscountedPrice);

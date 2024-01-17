@@ -29,7 +29,7 @@ public class Cart {
     @Column(name = "total_price")
     private double totalPrice;
 
-    @Column(name = "total_item")
+    @Column(name="total_item")
     private int totalItem;
 
     private int totalDiscountedPrice;

@@ -2,6 +2,7 @@ package com.ecommerce.controller;
 
 import com.ecommerce.request.LoginRequest;
 import com.ecommerce.response.AuthResponse;
+import com.ecommerce.service.AuthService;
 import com.ecommerce.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,12 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    UserService userService;
+    AuthService authService;
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> signUp(@RequestBody Map<String,String> requestMap){
         try {
-            return userService.signup(requestMap);
+            return authService.signUp(requestMap);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -36,7 +37,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> signIn(@RequestBody LoginRequest loginRequest){
         try {
-            return userService.signIn(loginRequest);
+            return authService.signIn(loginRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
