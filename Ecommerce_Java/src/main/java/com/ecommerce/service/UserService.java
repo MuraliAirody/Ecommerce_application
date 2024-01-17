@@ -1,15 +1,13 @@
 package com.ecommerce.service;
 
 import com.ecommerce.exception.UserException;
-import com.ecommerce.models.User;
-import com.ecommerce.request.LoginRequest;
-import com.ecommerce.response.AuthResponse;
-import org.springframework.http.ResponseEntity;
+import com.ecommerce.modal.User;
 
-import java.util.Map;
 
 public interface UserService {
-    public User findUserById(Long userId) throws UserException;
-    public User findUserProfileByJwt(String jwt) throws UserException;
+	
+	public User findUserById(Long userId) throws UserException;
+	
+	public User findUserProfileByJwt(String jwt) throws UserException;
 
 }

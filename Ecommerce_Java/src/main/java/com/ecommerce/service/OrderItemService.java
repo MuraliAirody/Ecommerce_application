@@ -1,9 +1,10 @@
 package com.ecommerce.service;
 
-import com.ecommerce.models.OrderItem;
+
+import com.ecommerce.modal.OrderItem;
 
 public interface OrderItemService {
-
-    public OrderItem createOrderItem(OrderItem orderItem);
+	
+	public OrderItem createOrderItem(OrderItem orderItem);
 
 }
