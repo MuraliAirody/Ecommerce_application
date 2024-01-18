@@ -7,7 +7,7 @@ import com.ecommerce.exception.UserException;
 import com.ecommerce.modal.Rating;
 import com.ecommerce.modal.User;
 import com.ecommerce.request.RatingRequest;
-import com.ecommerce.service.RatingServices;
+import com.ecommerce.service.RatingService;
 import com.ecommerce.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class RatingController {
 	
 	private UserService userService;
-	private RatingServices ratingServices;
+	private RatingService ratingServices;
 	
-	public RatingController(UserService userService,RatingServices ratingServices) {
+	public RatingController(UserService userService,RatingService ratingServices) {
 		this.ratingServices=ratingServices;
 		this.userService=userService;
 		// TODO Auto-generated constructor stub
