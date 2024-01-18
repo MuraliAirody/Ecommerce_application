@@ -3,6 +3,7 @@ package com.ecommerce.controller;
 import com.ecommerce.config.JwtTokenProvider;
 import com.ecommerce.config.JwtTokenValidator;
 import com.ecommerce.config.UserDetailService;
+import com.ecommerce.exception.UserException;
 import com.ecommerce.modal.User;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.request.LoginRequest;
@@ -49,20 +50,30 @@ public class AuthController {
 	CartService cartService;
 	
 	@PostMapping("/signup")
-	public ResponseEntity<AuthResponse> createUserHandler(@RequestBody Map<String, String> requestMap){
-		System.out.println("Inside Signup.........{} "+requestMap);
+	public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws UserException {
+		System.out.println("Inside Signup.........{} "+user.toString());
 		try {
-			if (validateSignUpMap(requestMap)) {
-				User existingUser = userRepository.findByEmail(requestMap.get("email"));
+			String email = user.getEmail();
+			String password = user.getPassword();
+			String firstName=user.getFirstName();
+			String lastName=user.getLastName();
+
+				User existingUser = userRepository.findByEmail(email);
 
 				if (existingUser == null) {
-					User newUser = getUserFromMap(requestMap);
-					User savedUser = userRepository.save(newUser);
+					User createdUser= new User();
+					createdUser.setEmail(email);
+					createdUser.setFirstName(firstName);
+					createdUser.setLastName(lastName);
+					createdUser.setPassword(passwordEncoder.encode(password));
+
+//					User newUser = getUserFromMap(user);
+					User savedUser = userRepository.save(createdUser);
 					cartService.createCart(savedUser);
 
 					// Generate a JWT token for the newly registered user
 					Authentication auth = authenticationManager.authenticate(
-							new UsernamePasswordAuthenticationToken(requestMap.get("email"), requestMap.get("password"))
+							new UsernamePasswordAuthenticationToken(email,password)
 					);
 
 					if (auth.isAuthenticated()) {
@@ -73,41 +84,35 @@ public class AuthController {
 						return ResponseEntity.ok(authResponse);
 					}
 				} else {
-					AuthResponse authResponse = new AuthResponse("Email already exists", false);
-					return ResponseEntity.badRequest().body(authResponse);
+					throw new UserException("Email Is Already Used With Another Account");
 				}
-			} else {
-				AuthResponse authResponse = new AuthResponse("Invalid data", false);
-				return ResponseEntity.badRequest().body(authResponse);
-			}
+
 		} catch (Exception ex) {
 			System.out.println("exception during signup {}"+ ex);
-			AuthResponse authResponse = new AuthResponse("Something went wrong", false);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(authResponse);
+			throw new UserException("Something went wrong");
 		}
-		AuthResponse authResponse = new AuthResponse("Something went wrong", false);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(authResponse);
+		throw new UserException("Internal server error");
 	}
 
-	private boolean validateSignUpMap(Map<String, String> requestMap) {
-		return requestMap.containsKey("firstName") &&
-				requestMap.containsKey("lastName") &&
-				requestMap.containsKey("email") &&
-				requestMap.containsKey("password");
-	}
+//	private boolean validateSignUpMap(User user) {
+//		return requestMap.containsKey("firstName") &&
+//				requestMap.containsKey("lastName") &&
+//				requestMap.containsKey("email") &&
+//				requestMap.containsKey("password");
+//	}
 
-	private User getUserFromMap(Map<String, String> requestMap) {
-		User user = new User();
-		user.setFirstName(requestMap.get("firstName"));
-		user.setLastName(requestMap.get("lastName"));
-		user.setEmail(requestMap.get("email"));
-		user.setRole("User");
-
-		String password = passwordEncoder.encode(requestMap.get("password"));
-		user.setPassword(password);
-
-		return user;
-	}
+//	private User getUserFromMap(User userReq) {
+//		User user = new User();
+//		user.setFirstName(userReq.getFirstName());
+//		user.setLastName(userReq.getLastName());
+//		user.setEmail(userReq.getEmail());
+//		user.setRole("User");
+//
+//		String password = passwordEncoder.encode(user.getPassword());
+//		user.setPassword(password);
+//
+//		return user;
+//	}
 	
 	@PostMapping("/signin")
     public ResponseEntity<AuthResponse> signin(@RequestBody LoginRequest loginRequest) {
@@ -125,12 +130,10 @@ public class AuthController {
 				return ResponseEntity.ok(authResponse);
 			}
 		} catch (Exception ex) {
-			System.out.println("exception during sign in"+ ex);
-			AuthResponse authResponse = new AuthResponse("Bad Credentials", false);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(authResponse);
+			ex.printStackTrace();
+			throw new BadCredentialsException("Bad credentials");
 		}
-		AuthResponse authResponse = new AuthResponse("Something went wrong", false);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(authResponse);
+		throw new InternalError("Internal Server Error");
     }
 
 }
