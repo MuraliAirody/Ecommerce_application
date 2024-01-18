@@ -1,62 +1,87 @@
 package com.ecommerce.config;
 
-import java.awt.RenderingHints.Key;
 import java.io.IOException;
-import java.util.List;
 
-import javax.crypto.SecretKey;
 
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.GrantedAuthoritiesContainer;
-import org.springframework.security.core.context.SecurityContext;
+
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@Service
+//@Slf4j
 public class JwtTokenValidator extends OncePerRequestFilter {
 
+
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+	@Autowired
+	private UserDetailService userDetailService;
+
+	Claims claims = null;
+	private String userName = null;
+
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		
-		String jwt = request.getHeader(JwtConstant.JWT_HEADER);
-		System.out.println("jwt ------ "+jwt);
-		if(jwt!=null) {
-			jwt=jwt.substring(7);
-			System.out.println("jwt ------ "+jwt);
-			try {
-				
-				SecretKey key= Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
-				
-				Claims claims=Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-				
-				String email=String.valueOf(claims.get("email"));
-				
-				String authorities=String.valueOf(claims.get("authorities"));
-				
-				List<GrantedAuthority> auths=AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
-				Authentication athentication=new UsernamePasswordAuthenticationToken(email,null, auths);
-				
-				SecurityContextHolder.getContext().setAuthentication(athentication);
-				
-			} catch (Exception e) {
-				// TODO: handle exception
-				throw new BadCredentialsException("invalid token...");
+	protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+		System.out.println("JwtFilter - > doFilterInternal..");
+		if (httpServletRequest.getServletPath().matches("/auth/signin|/auth/signup|/swagger-ui/index.html")) {
+			System.out.println("no filter required");
+			filterChain.doFilter(httpServletRequest, httpServletResponse);
+		} else {
+			System.out.println("filter required");
+			String authorizationHeader = httpServletRequest.getHeader("Authorization");
+			String token = null;
+
+			if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+				token = authorizationHeader.substring(7);
+				System.out.println("token {} "+token);
+				userName = jwtTokenProvider.extractUsername(token);
+				System.out.println("username {} "+userName);
+				claims = jwtTokenProvider.extractAllClaims(token);
+				System.out.println("claims {} "+claims);
 			}
+			if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+				UserDetails userDetails = userDetailService.loadUserByUsername(userName);
+				System.out.println("userdetails {} "+userDetails);
+				if (jwtTokenProvider.validateToken(token, userDetails)) {
+					UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
+							= new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+					usernamePasswordAuthenticationToken.setDetails(
+							new WebAuthenticationDetailsSource().buildDetails(httpServletRequest)
+					);
+
+					SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+				}
+			}
+			filterChain.doFilter(httpServletRequest, httpServletResponse);
 		}
-		filterChain.doFilter(request, response);
-		
+
+	}
+
+	public boolean isAdmin() {
+		System.out.println("isAdmin...");
+		System.out.println("claim...{} "+claims);
+		return "admin".equalsIgnoreCase((String) claims.get("role"));
+	}
+
+	public boolean isUser() {
+		System.out.println("isUser...");
+		return "user".equalsIgnoreCase((String) claims.get("role"));
+	}
+
+	public String getCurrentUser() {
+		System.out.println("getCurrentUser..");
+		return userName;
 	}
 
 }

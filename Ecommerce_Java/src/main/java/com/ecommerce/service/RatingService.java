@@ -8,7 +8,7 @@ import com.ecommerce.modal.User;
 import com.ecommerce.request.RatingRequest;
 
 
-public interface RatingServices {
+public interface RatingService {
 	
 	public Rating createRating(RatingRequest req, User user) throws ProductException;
 	

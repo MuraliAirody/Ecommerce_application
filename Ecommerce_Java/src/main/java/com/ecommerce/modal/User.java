@@ -28,8 +28,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
-	@Enumerated(EnumType.STRING)
-    private UserRole role;
+    private String role;
     
     private String mobile;
 
@@ -56,7 +55,7 @@ public class User {
 		
 	}
 
-	public User(Long id, String firstName, String lastName, String password, String email, UserRole role, String mobile,
+	public User(Long id, String firstName, String lastName, String password, String email, String role, String mobile,
 			List<Address> addresses, List<PaymentInformation> paymentInformation, List<Rating> ratings,
 			List<Review> reviews, LocalDateTime createdAt) {
 		super();
@@ -138,11 +137,11 @@ public class User {
 		this.email = email;
 	}
 
-	public UserRole getRole() {
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole(UserRole role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 

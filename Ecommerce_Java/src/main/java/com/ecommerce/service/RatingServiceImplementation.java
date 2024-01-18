@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class RatingServiceImplementation implements RatingServices{
+public class RatingServiceImplementation implements RatingService{
 	
 	private RatingRepository ratingRepository;
 	private ProductService productService;
