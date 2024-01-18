@@ -17,6 +17,8 @@ import OrderDetail from "../customer/components/Order/OrderDetail";
 function CustomerRouter() {
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={<Root></Root>}>
+        <Route path="/login" element={<Home></Home>}></Route>
+        <Route path="/register" element={<Home></Home>}></Route>
         <Route path="/" element={<Home></Home>}></Route>
         <Route path="/cart" element={<Cart></Cart>}></Route>
         <Route path="/:levelOne/:levelTwo/:levelThree" element={<Product></Product>}></Route>
