@@ -34,7 +34,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 		System.out.println("JwtFilter - > doFilterInternal..");
-		if (httpServletRequest.getServletPath().matches("/auth/signin|/auth/signup|/swagger-ui/index.html")) {
+		if (httpServletRequest.getServletPath().matches("/auth/signin|/auth/signup|/swagger-ui/index.html|/")) {
 			System.out.println("no filter required");
 			filterChain.doFilter(httpServletRequest, httpServletResponse);
 		} else {
