@@ -1,24 +1,24 @@
 import * as React from "react";
 import { Grid, TextField, Button, Box, Snackbar, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-// import { getUser, login } from "../../../Redux/Auth/Action";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser, login } from "../../../redux/Auth/action";
 import { useEffect } from "react";
 import { useState } from "react";
 
 export default function LoginForm({ handleNext }) {
   const navigate = useNavigate();
-//   const dispatch=useDispatch();
-//   const jwt=localStorage.getItem("jwt");
+  const dispatch=useDispatch();
+  const jwt=localStorage.getItem("jwt");
 //   const [openSnackBar,setOpenSnackBar]=useState(false);
-//   const { auth } = useSelector((store) => store);
+  const { auth } = useSelector((store) => store);
 //   const handleCloseSnackbar=()=>setOpenSnackBar(false);
-//   useEffect(()=>{
-//     if(jwt){
-//       dispatch(getUser(jwt))
-//     }
+  useEffect(()=>{
+    if(jwt){
+      dispatch(getUser(jwt))
+    }
   
-//   },[jwt])
+  },[jwt])
   
   
     // useEffect(() => {
@@ -36,12 +36,12 @@ export default function LoginForm({ handleNext }) {
     }
     console.log("login user",userData);
   
-    // dispatch(login(userData));
+    dispatch(login(userData));
 
   };
 
   return (
-    <React.Fragment className=" shadow-lg ">
+    <React.Fragment>
       <form className="w-full" onSubmit={handleSubmit}>
         <Grid container spacing={3}>
           <Grid item xs={12}>

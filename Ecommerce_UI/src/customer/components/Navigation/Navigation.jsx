@@ -59,9 +59,9 @@ export default function Navigation() {
     if(auth.user){
       handleClose()
     }
-    if(location.pathname==="/login" || location.pathname==="/register"){
-      navigate(-1)
-    }
+    // if(location.pathname==="/login" || location.pathname==="/register"){
+    //   navig(-1)
+    // }
   })
 
   const handleLogout=()=>{
