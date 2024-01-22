@@ -6,14 +6,15 @@ import {
   ShoppingBagIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Avatar, Button, Menu, MenuItem } from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
-import { navigation } from "../../../Data/Navigation/navigationData";
-import { useLocation, useNavigate } from "react-router-dom";
+import { navigation } from "../../../config/navigationMenu";
 import AuthModal from "../Auth/AuthModal";
 import { useDispatch, useSelector } from "react-redux";
+import { deepPurple } from "@mui/material/colors";
 import { getUser, logout } from "../../../redux/Auth/action";
-
+// import { getCart } from "../../../redux/customers/cart/action";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -21,56 +22,62 @@ function classNames(...classes) {
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
-  const navig = useNavigate()
-
-  const [openAuthModel,setOpenAuthModel] = useState(false)
-  const [anchorEl,setAnchorEl] = useState(null)
-  const openUserMenu = Boolean(anchorEl)
-  const jwt = localStorage.getItem("jwt")
-  const { auth } = useSelector((store) => store);
-  const dispatch = useDispatch()
-  const location = useLocation()
-
-  const handleUserClick = (event) =>{
-    setAnchorEl(event.currentTarget);
-  }
-  const handleCloseUserMenu = (event) =>{
-    setAnchorEl(null);
-  }
-  const handleOpen=()=>{
-    setOpenAuthModel(true)
-  }
-  const handleClose=()=>{
-    setOpenAuthModel(false)
-  }
-
-  const handleCategoryClick=(category,section,item,close)=>{
-    navig(`/${category.id}/${section.id}/${item.id}`);
-    close();
-  }
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const auth = useSelector((store) => store.auth);
+  const [openAuthModal, setOpenAuthModal] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openUserMenu = Boolean(anchorEl);
+  const jwt = localStorage.getItem("jwt");
+  const location=useLocation();
 
   useEffect(() => {
     if (jwt) {
       dispatch(getUser(jwt));
+      // dispatch(getCart(jwt));
     }
-  }, [jwt,auth.jwt]);
+  }, [jwt]);
+  
+  const handleUserClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseUserMenu = (event) => {
+    setAnchorEl(null);
+  };
 
-  useEffect(()=>{
-    if(auth.user){
-      handleClose()
+  const handleOpen = () => {
+    setOpenAuthModal(true);
+  };
+  const handleClose = () => {
+    setOpenAuthModal(false);
+   
+  };
+
+  const handleCategoryClick = (category, section, item, close) => {
+    navigate(`/${category.id}/${section.id}/${item.id}`);
+    close();
+  };
+
+  useEffect(() => {
+    if (auth.user){ 
+      handleClose();
     }
-    // if(location.pathname==="/login" || location.pathname==="/register"){
-    //   navig(-1)
-    // }
-  })
+    if(location.pathname==="/login" || location.pathname==="/register"){
+      navigate(-1)
+    }
+  }, [auth.user]);
 
-  const handleLogout=()=>{
-    dispatch(logout(jwt))
+  const handleLogout = () => {
+    handleCloseUserMenu();
+    dispatch(logout());
+  };
+  const handleMyOrderClick=()=>{
     handleCloseUserMenu()
+    navigate("/account/order")
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-white pb-10">
       {/* Mobile menu */}
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
@@ -100,10 +107,9 @@ export default function Navigation() {
                 <div className="flex px-4 pb-2 pt-5">
                   <button
                     type="button"
-                    className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
+                    className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
                     onClick={() => setOpen(false)}
                   >
-                    <span className="absolute -inset-0.5" />
                     <span className="sr-only">Close menu</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
@@ -121,7 +127,7 @@ export default function Navigation() {
                               selected
                                 ? "border-indigo-600 text-indigo-600"
                                 : "border-transparent text-gray-900",
-                              "flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium"
+                              "flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium border-none"
                             )
                           }
                         >
@@ -173,6 +179,7 @@ export default function Navigation() {
                             >
                               {section.name}
                             </p>
+                            {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
                             <ul
                               role="list"
                               aria-labelledby={`${category.id}-${section.id}-heading-mobile`}
@@ -180,12 +187,9 @@ export default function Navigation() {
                             >
                               {section.items.map((item) => (
                                 <li key={item.name} className="flow-root">
-                                  <a
-                                    href={item.href}
-                                    className="-m-2 block p-2 text-gray-500"
-                                  >
-                                    {item.name}
-                                  </a>
+                                  <p className="-m-2 block p-2 text-gray-500">
+                                    {"item.name"}
+                                  </p>
                                 </li>
                               ))}
                             </ul>
@@ -212,24 +216,16 @@ export default function Navigation() {
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <div className="flow-root">
                     <a
-                      href="#"
+                      href="/"
                       className="-m-2 block p-2 font-medium text-gray-900"
                     >
                       Sign in
                     </a>
                   </div>
-                  <div className="flow-root">
-                    <a
-                      href="#"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      Create account
-                    </a>
-                  </div>
                 </div>
 
                 <div className="border-t border-gray-200 px-4 py-6">
-                  <a href="#" className="-m-2 flex items-center p-2">
+                  <a href="/" className="-m-2 flex items-center p-2">
                     <img
                       src="https://tailwindui.com/img/flags/flag-canada.svg"
                       alt=""
@@ -252,33 +248,28 @@ export default function Navigation() {
           Get free delivery on orders over $100
         </p>
 
-        <nav
-          aria-label="Top"
-          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
-        >
+        <nav aria-label="Top" className="mx-auto">
           <div className="border-b border-gray-200">
-            <div className="flex h-16 items-center">
+            <div className="flex h-16 items-center px-11">
               <button
                 type="button"
-                className="relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
+                className="rounded-md bg-white p-2 text-gray-400 lg:hidden"
                 onClick={() => setOpen(true)}
               >
-                <span className="absolute -inset-0.5" />
                 <span className="sr-only">Open menu</span>
                 <Bars3Icon className="h-6 w-6" aria-hidden="true" />
               </button>
 
               {/* Logo */}
               <div className="ml-4 flex lg:ml-0">
-                <a href="#">
+                <Link to="/">
                   <span className="sr-only">Your Company</span>
                   <img
-                    onClick={()=> navig("/")}
+                    src="https://res.cloudinary.com/ddkso1wxi/image/upload/v1675919455/Logo/Copy_of_Zosh_Academy_nblljp.png"
+                    alt="Shopwithzosh"
                     className="h-8 w-8 mr-2"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt=""
                   />
-                </a>
+                </Link>
               </div>
 
               {/* Flyout menus */}
@@ -361,6 +352,7 @@ export default function Navigation() {
                                           >
                                             {section.name}
                                           </p>
+                                          {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
                                           <ul
                                             role="list"
                                             aria-labelledby={`${section.name}-heading`}
@@ -371,9 +363,6 @@ export default function Navigation() {
                                                 key={item.name}
                                                 className="flex"
                                               >
-                                                <a href={item.href} className="hover:text-gray-800">
-                                                  {item.name}
-                                                </a>
                                                 <p
                                                   onClick={() =>
                                                     handleCategoryClick(
@@ -384,7 +373,9 @@ export default function Navigation() {
                                                     )
                                                   }
                                                   className="cursor-pointer hover:text-gray-800"
-                                                ></p>
+                                                >
+                                                  {item.name}
+                                                </p>
                                               </li>
                                             ))}
                                           </ul>
@@ -415,77 +406,94 @@ export default function Navigation() {
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  {auth.user?.firstName ? (
-                  <div>
-                    <Avatar
-                      className="text-white"
-                      onClick={handleUserClick}
-                      aria-controls={open ? "basic-menu" : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={open ? "true" : undefined}
-                      sx={{
-                        bgcolor: deepPurple[500],
-                        color: "white",
-                        cursor: "pointer",
-                      }}
+                  {auth.user ? (
+                    <div>
+                      <Avatar
+                        className="text-white"
+                        onClick={handleUserClick}
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        // onClick={handleUserClick}
+                        sx={{
+                          bgcolor: deepPurple[500],
+                          color: "white",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {auth.user?.firstName[0].toUpperCase()}
+                      </Avatar>
+                      {/* <Button
+                        id="basic-button"
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleUserClick}
+                      >
+                        Dashboard
+                      </Button> */}
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={openUserMenu}
+                        onClose={handleCloseUserMenu}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem onClick={handleCloseUserMenu}>
+                          Profile
+                        </MenuItem>
+                        
+                        <MenuItem onClick={handleMyOrderClick}>
+                          My Orders
+                        </MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                      </Menu>
+                    </div>
+                  ) : (
+                    <Button
+                      onClick={handleOpen}
+                      className="text-sm font-medium text-gray-700 hover:text-gray-800"
                     >
-                      {auth.user.firstName[0].toUpperCase()}
-                    </Avatar>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={openUserMenu}
-                      // close={handleCloseUserMenu}
-                      MenuListProps={{
-                        "aria-labelledby": "basic-button",
-                      }}
-                    >
-                      <MenuItem onClick={handleCloseUserMenu}>Profile</MenuItem>
-                      <MenuItem onClick={()=>{navig("/account/order");handleCloseUserMenu}}>My Orders</MenuItem>
-                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                    </Menu>
-                  </div>
-                  ):(
-                  <Button
-                    onClick={handleOpen}
-                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                  >
-                    Signin
-                  </Button>
+                      Signin
+                    </Button>
                   )}
                 </div>
 
                 {/* Search */}
                 <div className="flex lg:ml-6">
-                  <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
+                  <p className="p-2 text-gray-400 hover:text-gray-500">
                     <span className="sr-only">Search</span>
                     <MagnifyingGlassIcon
                       className="h-6 w-6"
                       aria-hidden="true"
                     />
-                  </a>
+                  </p>
                 </div>
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <a href="#" className="group -m-2 flex items-center p-2">
+                  <Button
+                    onClick={() => navigate("/cart")}
+                    className="group -m-2 flex items-center p-2"
+                  >
                     <ShoppingBagIcon
-                      onClick={()=>navig("/cart")}
                       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      0
+                      {/* {cart.cart?.totalItem} */}
                     </span>
                     <span className="sr-only">items in cart, view bag</span>
-                  </a>
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
         </nav>
       </header>
-      <AuthModal handleClose={handleClose} open={openAuthModel} />
+      <AuthModal handleClose={handleClose} open={openAuthModal} />
     </div>
   );
 }
