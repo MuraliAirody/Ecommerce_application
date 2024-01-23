@@ -46,6 +46,8 @@ export default function Product() {
   const pageNumber = searchParams.get("page") || 1;
   const stock = searchParams.get("Stock");
 
+  const jwt = localStorage.getItem("jwt")
+  console.log("product jwt: ",jwt);
   const handleFilter = (value, sectionId) => {
     const searchParams = new URLSearchParams(location.search);
 
@@ -101,6 +103,7 @@ export default function Product() {
       pageNumber: pageNumber - 1,
       pageSize: 10,
       stock: stock,
+      jwt:jwt
     };
     dispatch(findProducts(data));
   }, [
@@ -112,6 +115,7 @@ export default function Product() {
     sortValue,
     pageNumber,
     stock,
+    jwt
   ]);
 
   return (

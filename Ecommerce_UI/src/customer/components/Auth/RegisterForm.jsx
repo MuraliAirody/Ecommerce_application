@@ -8,7 +8,7 @@ export default function RegisterForm({ handleNext }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   //   const [openSnackBar,setOpenSnackBar]=useState(false);
-    const { auth } = useSelector((store) => store);
+    const  auth  = useSelector((store) => store.auth);
   //   const handleClose=()=>setOpenSnackBar(false);
 
   const jwt = localStorage.getItem("jwt");

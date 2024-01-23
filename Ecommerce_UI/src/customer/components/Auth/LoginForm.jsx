@@ -11,7 +11,7 @@ export default function LoginForm({ handleNext }) {
   const dispatch=useDispatch();
   const jwt=localStorage.getItem("jwt");
 //   const [openSnackBar,setOpenSnackBar]=useState(false);
-  const { auth } = useSelector((store) => store);
+  const auth  = useSelector((store) => store.auth);
 //   const handleCloseSnackbar=()=>setOpenSnackBar(false);
   useEffect(()=>{
     if(jwt){

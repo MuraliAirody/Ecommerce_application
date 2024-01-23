@@ -18,6 +18,7 @@ import {
 } from "./actionType";
 
 export const addItemToCart = (reqData) => async (dispatch) => {
+  
     console.log("req data ",reqData)
   try {
    

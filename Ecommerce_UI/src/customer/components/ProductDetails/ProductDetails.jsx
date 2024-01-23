@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
 import Rating from "@mui/material/Rating";
@@ -6,7 +6,10 @@ import { Button } from "@mui/material";
 import { Grid, Box } from "@mui/material";
 import ProductReviewCard from "./ProductReviewCard";
 import LinearProgress from "@mui/material/LinearProgress";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { findProductById } from "../../../redux/customer/product/action";
+import { addItemToCart } from "../../../redux/customer/cart/action";
 
 const product = {
   name: "Basic Tee 6-Pack",
@@ -63,13 +66,25 @@ function classNames(...classes) {
 }
 
 export default function ProductDetails() {
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
+  const [selectedSize, setSelectedSize] = useState('M');
   const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const customersProduct = useSelector((store) => store.customersProduct);
+  const { productID } = useParams();
+  const jwt = localStorage.getItem("jwt");
+    // console.log("productDetails jwt: ",jwt);
+
 
   function handleAddToCart(e){
+    const data = {productId: productID, size: selectedSize };
+    dispatch(addItemToCart({ data, jwt }));
     navigate("/cart")
   }
+  useEffect(() => {
+    const data = { productId: Number(productID), jwt };
+    dispatch(findProductById(data));
+    // dispatch(getAllReviews(productId));
+  }, [productID,jwt]);
 
   return (
     <div className="bg-white lg:px-10">
@@ -118,8 +133,8 @@ export default function ProductDetails() {
           <div className="flex flex-col items-center">
             <div className="overflow-hidden rounded-lg max-w-[30rem] max-h-[35rem]">
               <img
-                src={product.images[0].src}
-                alt={product.images[0].alt}
+                src={customersProduct.product?.imageUrl}
+                // alt={customersProduct.product.imageUrl}
                 className="h-full w-full object-cover object-center"
               />
             </div>
@@ -143,10 +158,10 @@ export default function ProductDetails() {
           <div className="lg:col-span-1 max-t-auto max-w-2xl px-4 pb-16 sm:px-6 lg:max-w-7xl lg:px-8 lg:pb-24">
             <div className="lg:col-span-2 ">
               <h1 className="text-lg lg:text-xl font-semibold text-gray-900">
-                Brand
+                {customersProduct.product?.brand}
               </h1>
               <h1 className="text-lg lg:text-xl text-gray-900 opacity-35">
-                {product.name}
+                {customersProduct.product?.title}
               </h1>
             </div>
 
@@ -154,9 +169,9 @@ export default function ProductDetails() {
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
               <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-6">
-                <p className="font-semibold">{product.price}</p>
-                <p className="opacity-50 line-through">200</p>
-                <p className="text-green-600 font-semibold">50% off</p>
+                <p className="font-semibold">₹{customersProduct.product?.discountedPrice}</p>
+                <p className="opacity-50 line-through">₹{customersProduct.product?.price}</p>
+                <p className="text-green-600 font-semibold">{customersProduct.product?.discountPersent}% Off</p>
               </div>
 
               {/* Reviews */}
@@ -186,27 +201,27 @@ export default function ProductDetails() {
                       Choose a size
                     </RadioGroup.Label>
                     <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                      {product.sizes.map((size) => (
+                      {customersProduct.product?.sizes?.map((size) => (
                         <RadioGroup.Option
                           key={size.name}
-                          value={size}
-                          disabled={!size.inStock}
+                          value={size.name}
+                          disabled={!size.quantity>0}
                           className={({ active }) =>
                             classNames(
-                              size.inStock
+                              size.quantity>0
                                 ? "cursor-pointer bg-white text-gray-900 shadow-sm"
                                 : "cursor-not-allowed bg-gray-50 text-gray-200",
                               active ? "ring-2 ring-indigo-500" : "",
                               "group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6"
                             )
                           }
-                        >
+                        > 
                           {({ active, checked }) => (
                             <>
                               <RadioGroup.Label as="span">
                                 {size.name}
                               </RadioGroup.Label>
-                              {size.inStock ? (
+                              {size.quantity>0 ? (
                                 <span
                                   className={classNames(
                                     active ? "border" : "border-2",

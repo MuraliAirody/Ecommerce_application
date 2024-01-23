@@ -75,5 +75,6 @@ export const logout = (token) => {
     return async (dispatch) => {
       dispatch({ type: LOGOUT });
       localStorage.clear();
+      window.location.reload();
     };
   };

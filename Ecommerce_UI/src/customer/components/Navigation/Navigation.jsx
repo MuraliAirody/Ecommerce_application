@@ -63,7 +63,7 @@ export default function Navigation() {
       handleClose();
     }
     if(location.pathname==="/login" || location.pathname==="/register"){
-      navigate(-1)
+      navigate("/")
     }
   }, [auth.user]);
 
