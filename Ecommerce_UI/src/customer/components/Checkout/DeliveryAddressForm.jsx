@@ -1,25 +1,38 @@
 import { Button, Grid, Box, TextField } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import AddressCard from "../AddressCard/AddressCard";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { createOrder } from "../../../redux/customer/order/action";
 
 function DeliveryAddressForm() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const jwt = localStorage.getItem("jwt");
+  const auth = useSelector((store) => store.auth);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
-    function handleSubmit(e){
-       e.preventDefault()
-       const data = new FormData(e.currentTarget)
-       
-       const address={
-        firstName:data.get("firstName"),
-        lastName:data.get("lastName"),
-        address:data.get("address"),
-        city:data.get("city"),
-        state:data.get("state"),
-        zip:data.get("zip"),
-        phoneNumber:data.get("phoneNumber"),
-       }
+  function handleSubmit(e) {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
 
-       console.log(address);
-    }
+    const address = {
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
+      streetAddress: data.get("address"),
+      city: data.get("city"),
+      state: data.get("state"),
+      zipCode: data.get("zip"),
+      mobile: data.get("phoneNumber"),
+    };
+    dispatch(createOrder({address,jwt,navigate}));
+    console.log(address);
+  }
+  const handleCreateOrder = (item) => {
+    console.log("item: ",item)
+    dispatch(createOrder({address:item, jwt, navigate }));
+    // handleNext();
+  };
   return (
     <div>
       <Grid container spacing={4}>
@@ -29,16 +42,29 @@ function DeliveryAddressForm() {
           item
           className="border rounded-md shadow-md h-[30.5rem] overflow-scroll"
         >
-          <div className="p-5 py-7 border-b cursor-pointer">
-            <AddressCard />
-            <Button
-              sx={{ mt: 2, bgcolor: "purple" }}
-              size="large"
-              variant="contained"
-            >
-              Deliver Here
-            </Button>
-          </div>
+          <Box className="border rounded-md shadow-md h-[30.5rem] overflow-y-scroll ">
+            {auth.user?.addresses.slice(-3).map((item,index) => (
+              <div
+                key={index}
+                onClick={() => setSelectedAddress(item)}
+                className="p-5 py-7 border-b cursor-pointer"
+              >
+                {" "}
+                <AddressCard address={item} />
+                {selectedAddress?.id === item.id && (
+                  <Button
+                    sx={{ mt: 2 }}
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleCreateOrder(item)}
+                  >
+                    Deliver Here
+                  </Button>
+                )}
+              </div>
+            ))}
+          </Box>
         </Grid>
         <Grid item xs={12} lg={7}>
           <Box className="border rounded-md shadow-md p-5">

@@ -15,6 +15,7 @@ function Cart() {
   console.log("cart ",cart)
 
   useEffect(() => {
+    console.log("inside use effect");
     dispatch(getCart(jwt));
     console.log("fetching carts");
   }, [jwt]);
@@ -28,7 +29,7 @@ function Cart() {
     <div>
       <div className="lg:grid grid-cols-3 lg:px-16 relative">
         <div className="col-span-2">
-          {cart.cartItems?.map((item,index)=><CartItem key={index} item={item}/>)}
+          {cart?.cartItems?.map((item,index)=><CartItem key={index} item={item}/>)}
         </div>
         <div className="px-5 sticky top-0 h-[100vh] mt-5 lg:mt-0">
           <div className="border p-4 mb-2">

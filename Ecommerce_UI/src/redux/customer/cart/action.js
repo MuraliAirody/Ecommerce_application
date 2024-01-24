@@ -58,7 +58,7 @@ export const getCart = (jwt) => async (dispatch) => {
         },
       };
     const { data } = await axios.get(`${API_BASE_URL}/api/cart/`,config);
-console.log("cart ",data)
+console.log("getCart ",data)
     dispatch({
       type: GET_CART_SUCCESS,
       payload: data,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -11,16 +11,17 @@ function CartItem({item}) {
   const jwt = localStorage.getItem("jwt");
 
 
-  console.log("item:  ",item);
+  // console.log("item:  ",item);
 
   const handleRemoveItemFromCart = () => {
     const data = { cartItemId: item?.id, jwt };
     dispatch(removeCartItem(data));
   };
   const handleUpdateCartItem=(num)=>{
-    const data={data:{quantity:item.quantity+num}, cartItemId:item?.id, jwt}
+    const data={data:{quantity:item?.quantity+num}, cartItemId:item?.id, jwt}
     dispatch(updateCartItem(data))
   }
+  
   
 
   return (
