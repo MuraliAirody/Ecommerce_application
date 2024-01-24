@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CartItem from "./CartItem";
 import { Button, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getCart } from "../../../redux/customer/cart/action";
+
 
 function Cart() {
   const navigate = useNavigate()
+  const dispatch = useDispatch();
+
+  const jwt = localStorage.getItem("jwt");
+  const cart=useSelector(store=>store.cart);
+  console.log("cart ",cart)
+
+  useEffect(() => {
+    dispatch(getCart(jwt));
+    console.log("fetching carts");
+  }, [jwt]);
+
+
   function handleCheckout(){
     navigate("/checkout?step=2")
   }
@@ -13,7 +28,7 @@ function Cart() {
     <div>
       <div className="lg:grid grid-cols-3 lg:px-16 relative">
         <div className="col-span-2">
-          {[1,1,1].map((item,index)=><CartItem key={index}/>)}
+          {cart.cartItems?.map((item,index)=><CartItem key={index} item={item}/>)}
         </div>
         <div className="px-5 sticky top-0 h-[100vh] mt-5 lg:mt-0">
           <div className="border p-4 mb-2">
@@ -22,11 +37,11 @@ function Cart() {
             <div className="space-y-3 font-semibold p-4">
               <div className="flex justify-between pt-3 text-black">
                 <span>Price</span>
-                <span>Rs.500</span>
+                <span>Rs.{cart?.cart?.totalPrice}</span>
               </div>
               <div className="flex justify-between pt-3">
                 <span>Discount</span>
-                <span className=" text-red-600">- Rs.100</span>
+                <span className=" text-red-600">- Rs.{cart?.cart?.discounte}</span>
               </div>
               <div className="flex justify-between pt-3 ">
                 <span>Delivery Charge</span>
@@ -34,7 +49,7 @@ function Cart() {
               </div>
               <div className="flex justify-between pt-3 font-bold">
                 <span>Total Amount</span>
-                <span className="text-green-600">Rs.400</span>
+                <span className="text-green-600">Rs.{cart?.cart?.totalDiscountedPrice}</span>
               </div>
             </div>
             <Button

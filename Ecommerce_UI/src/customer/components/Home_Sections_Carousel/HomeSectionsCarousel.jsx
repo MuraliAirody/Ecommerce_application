@@ -73,7 +73,7 @@ function HomeSectionsCarousel({data,sectionName}) {
             aria-label="next"
           >
             <ArrowBackIosNewIcon
-              sx={{ color: "black", transform: "rotate(90deg)" }}
+              sx={{ color: "black", transform: "rotate(90deg)",zIndex:"-10px" }}
             />
           </Button>
       
