@@ -5,17 +5,7 @@ package com.ecommerce.modal;
 
 
 import com.ecommerce.user.domain.OrderStatus;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,7 +32,8 @@ public class Order {
 
     private LocalDateTime deliveryDate;
 
-    @OneToOne
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "shipping_address_id")
     private Address shippingAddress;
 
     @Embedded

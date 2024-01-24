@@ -42,8 +42,12 @@ public class OrderServiceImplementation implements OrderService {
 	public Order createOrder(User user, Address shippAddress) {
 		
 		shippAddress.setUser(user);
-		Address address= addressRepository.save(shippAddress);
+        System.out.println("address exist "+shippAddress.getId());
+
+        Address address= addressRepository.save(shippAddress);
+        System.out.println("address saved successfully");
 		user.getAddresses().add(address);
+		
 		userRepository.save(user);
 		
 		Cart cart=cartService.findUserCart(user.getId());
