@@ -5,6 +5,7 @@ import CartItem from "../Cart/CartItem";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderById } from "../../../redux/customer/order/action";
+import { createPayment } from "../../../redux/customer/payment/action";
 
 function OrderSummary() {
   const location = useLocation();
@@ -20,10 +21,10 @@ function OrderSummary() {
     dispatch(getOrderById(orderId));
   }, [orderId]);
 
-  // const handleCreatePayment = () => {
-  //   const data = { orderId: order.order?.id, jwt };
-  //   dispatch(createPayment(data));
-  // };
+  const handleCreatePayment = () => {
+    const data = { orderId: order.order?.id, jwt };
+    dispatch(createPayment(data));
+  };
 
   return (
     <div>
@@ -68,6 +69,7 @@ function OrderSummary() {
                 sx={{ bgcolor: "#32CD32", color: "black" }}
                 variant="contained"
                 color="success"
+                onClick={handleCreatePayment}
               >
                 Checkout
               </Button>{" "}

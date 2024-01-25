@@ -13,6 +13,7 @@ import ProductDetails from "../customer/components/ProductDetails/ProductDetails
 import Checkout from "../customer/components/Checkout/Checkout";
 import Order from "../customer/components/Order/Order";
 import OrderDetail from "../customer/components/Order/OrderDetail";
+import PaymentSuccess from "../customer/components/paymentSuccess/PaymentSuccess";
 
 function CustomerRouter() {
   const router = createBrowserRouter(createRoutesFromElements(
@@ -26,6 +27,7 @@ function CustomerRouter() {
         <Route path="/checkout" element={<Checkout></Checkout>}></Route>
         <Route path="/account/order" element={<Order></Order>}></Route>
         <Route path="/account/order/:orderID" element={<OrderDetail></OrderDetail>}></Route>
+        <Route path="/payment/:orderID" element={<PaymentSuccess></PaymentSuccess>}></Route>
     </Route>
   ));
 
