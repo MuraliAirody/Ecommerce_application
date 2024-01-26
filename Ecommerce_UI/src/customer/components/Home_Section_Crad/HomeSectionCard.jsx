@@ -2,11 +2,11 @@ import React from "react";
 
 function HomeSectionCard({ product }) {
   return (
-    <div className="cursor-pointer flex flex-col items-center bg-white rounded-lg shadow-lg overflow-hidden w-[15rem] mx-3">
-      <div className="h-[13rem] w-[10rem]">
+    <div className="cursor-pointer flex flex-col items-center bg-white rounded-lg shadow-lg overflow-hidden h-[20rem] w-[15rem] mx-3">
+      <div className="h-[15rem] w-[10rem]">
         <img
           className="object-cover object-top w-full h-full"
-          src={product.imageUrl}
+          src={product.imageUrl || product.image}
           alt=""
         />
       </div>
