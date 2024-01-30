@@ -17,6 +17,7 @@ import {
   UPDATE_CART_ITEM_SUCCESS,
 } from "./actionType";
 
+
 export const addItemToCart = (reqData) => async (dispatch) => {
   
     console.log("req data ",reqData)
@@ -57,7 +58,7 @@ export const getCart = (jwt) => async (dispatch) => {
           "Content-Type":"application/json"
         },
       };
-    const { data } = await axios.get(`${API_BASE_URL}/api/cart/`,config);
+    const { data } = await axios.get(`${API_BASE_URL}/api/cart/`,config); 
 console.log("getCart ",data)
     dispatch({
       type: GET_CART_SUCCESS,
@@ -101,6 +102,7 @@ export const removeCartItem = (reqData) => async (dispatch) => {
   };
   
   export const updateCartItem = (reqData) => async (dispatch) => {
+
     try {
       dispatch({ type: UPDATE_CART_ITEM_REQUEST });
       const config = {
@@ -113,7 +115,8 @@ export const removeCartItem = (reqData) => async (dispatch) => {
         `${API_BASE_URL}/api/cart_items/${reqData.cartItemId}`,
         reqData.data,config
       );
-  console.log("updated cart item ",data)
+      await axios.get(`${API_BASE_URL}/api/cart/`,config);
+      console.log("updated cart item ",data)
       dispatch({
         type: UPDATE_CART_ITEM_SUCCESS,
         payload: data,

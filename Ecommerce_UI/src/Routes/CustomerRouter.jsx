@@ -2,6 +2,7 @@ import React from "react";
 import {
     Route,
   RouterProvider,
+  Routes,
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
@@ -17,29 +18,24 @@ import PaymentSuccess from "../customer/components/paymentSuccess/PaymentSuccess
 import RateProduct from "../customer/components/ReviewProduct/RateProduct";
 
 function CustomerRouter() {
-  const router = createBrowserRouter(createRoutesFromElements(
-    <Route path="/" element={<Root></Root>}>
-        <Route path="/login" element={<Home></Home>}></Route>
-        <Route path="/register" element={<Home></Home>}></Route>
-        <Route path="/" element={<Home></Home>}></Route>
-        <Route path="/cart" element={<Cart></Cart>}></Route>
-        <Route path="/:levelOne/:levelTwo/:levelThree" element={<Product></Product>}></Route>
-        <Route path="/product/:productID" element={<ProductDetails></ProductDetails>}></Route>
-        <Route path="/checkout" element={<Checkout></Checkout>}></Route>
-        <Route path="/account/order" element={<Order></Order>}></Route>
-        <Route path="/account/order/:orderID" element={<OrderDetail></OrderDetail>}></Route>
-        <Route path="/payment/:orderID" element={<PaymentSuccess></PaymentSuccess>}></Route>
-        <Route path="/account/rate/:productId" element={<RateProduct />}></Route>
-    </Route>
-  ));
-
-
-        {/* <Order/> */}
-        // <OrderDetail/>
-
+  console.log("user routes");
   return (
     <>
-      <RouterProvider router={router} />
+      <Routes>
+        <Route path="/" element={<Root></Root>}>
+          <Route path="/login" element={<Home></Home>}></Route>
+          <Route path="/register" element={<Home></Home>}></Route>
+          <Route path="/" element={<Home></Home>}></Route>
+          <Route path="/cart" element={<Cart></Cart>}></Route>
+          <Route path="/:levelOne/:levelTwo/:levelThree" element={<Product></Product>}></Route>
+          <Route path="/product/:productID" element={<ProductDetails></ProductDetails>}></Route>
+          <Route path="/checkout" element={<Checkout></Checkout>}></Route>
+          <Route path="/account/order" element={<Order></Order>}></Route>
+          <Route path="/account/order/:orderID" element={<OrderDetail></OrderDetail>}></Route>
+          <Route path="/payment/:orderID" element={<PaymentSuccess></PaymentSuccess>}></Route>
+          <Route path="/account/rate/:productId" element={<RateProduct />}></Route>
+        </Route>
+      </Routes>
     </>
   );
 }

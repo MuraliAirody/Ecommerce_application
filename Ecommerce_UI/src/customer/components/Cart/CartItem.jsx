@@ -26,6 +26,7 @@ function CartItem({item}) {
 
   return (
     <div className="p-5 shadow-lg border rounded-md">
+      {console.log("cart Item")}
       <div className="flex items-center">
         <div className="w-[8rem] h-[8rem] lg:w-[8rem] lg:h-[10rem]">
           <img
