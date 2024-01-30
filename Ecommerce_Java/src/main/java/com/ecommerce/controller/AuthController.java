@@ -66,6 +66,7 @@ public class AuthController {
 					createdUser.setFirstName(firstName);
 					createdUser.setLastName(lastName);
 					createdUser.setPassword(passwordEncoder.encode(password));
+					createdUser.setRole("User");
 
 //					User newUser = getUserFromMap(user);
 					User savedUser = userRepository.save(createdUser);
