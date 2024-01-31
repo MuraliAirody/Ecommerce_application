@@ -91,7 +91,7 @@ public class PaymentController {
 		      PaymentLinkResponse res=new PaymentLinkResponse(paymentLinkUrl,paymentLinkId);
 		      
 		      PaymentLink fetchedPayment = razorpay.paymentLink.fetch(paymentLinkId);
-		      
+
 		      order.setOrderId(fetchedPayment.get("order_id"));
 		      orderRepository.save(order);
 		      
@@ -114,7 +114,7 @@ public class PaymentController {
 	
   @GetMapping("/payments")
   public ResponseEntity<ApiResponse> redirect(@RequestParam(name="payment_id") String paymentId, @RequestParam("order_id")Long orderId) throws RazorpayException, OrderException {
-	  RazorpayClient razorpay = new RazorpayClient("rzp_test_kTsRSaDC8hwztX", "LieoD1s9mxMIv569PcgRDMcU");
+	  RazorpayClient razorpay = new RazorpayClient(apiKey, apiSecretKey);
 	  Order order =orderService.findOrderById(orderId);
 	
 	  try {

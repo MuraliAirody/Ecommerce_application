@@ -159,7 +159,7 @@ public class OrderServiceImplementation implements OrderService {
 	@Override
 	public void deleteOrder(Long orderId) throws OrderException {
 		Order order =findOrderById(orderId);
-		
+		order.setShippingAddress(null);
 		orderRepository.deleteById(orderId);
 		
 	}
