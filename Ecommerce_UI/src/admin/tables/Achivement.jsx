@@ -37,7 +37,7 @@ const Achivement = () => {
     <Card sx={{ position: "relative" }}>
       <CardContent>
         <Typography variant="h6" sx={{ letterSpacing: "0.25px" }}>
-          Shop With newTrend
+          Shop With NewTrend
         </Typography>
         <Typography variant="body2">Congratulations 🥳</Typography>
 

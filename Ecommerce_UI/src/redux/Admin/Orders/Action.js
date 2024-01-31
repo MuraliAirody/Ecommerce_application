@@ -32,7 +32,7 @@ export const getOrders = (reqData) => {
       console.log("get all orders ", response.data);
       dispatch({
         type: GET_ORDERS_SUCCESS,
-        payload: orders,
+        payload: response.data,
       });
     } catch (error) {
       console.log("catch error ", error);
