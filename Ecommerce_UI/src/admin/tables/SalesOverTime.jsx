@@ -14,7 +14,6 @@ import DotsVertical from 'mdi-material-ui/DotsVertical'
 // ** Custom Components Imports
 import ReactApexCharts from 'react-apexcharts';
 
-// import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
 const SalesOverTime = () => {
   // ** Hook

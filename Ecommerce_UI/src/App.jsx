@@ -1,28 +1,39 @@
-import {
-  BrowserRouter,
-  Route,
-  Router,
-  RouterProvider,
-  Routes,
-  createBrowserRouter,
-} from "react-router-dom";
-import "./App.css";
-
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import CustomerRouter from "./Routes/CustomerRouter";
-import { Provider } from "react-redux";
-import { store } from "./redux/store";
 import AdminRouter from "./Routes/AdminRouter";
+import { getUser } from "./redux/Auth/action";
+import NotFound from "./pages/Notfound";
 
 function App() {
+  const [profile, setProfile] = useState(null);
+  const jwt = localStorage.getItem("jwt");
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getUser(jwt));
+    }
+  }, [dispatch, jwt]);
+
+  useEffect(() => {
+    setProfile(auth.user);
+  }, [auth]);
+
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/*" element={<CustomerRouter />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/*" element={<CustomerRouter />} />
+        {profile?.role === "Admin" ? (
           <Route path="/admin/*" element={<AdminRouter />} />
-        </Routes>
-      </BrowserRouter>
-    </Provider>
+        ) : (
+          <Route path="/admin/*" element={<NotFound />} />
+        )}
+        <Route path="/error" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

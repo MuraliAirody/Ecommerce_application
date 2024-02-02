@@ -42,9 +42,9 @@ const Dashboard = () => {
             <Grid item xs={12} md={8}>
               <MonthlyOverview />
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
+            {/* <Grid item xs={12} md={6} lg={4}>
               <WeeklyOverview />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} md={6} lg={4}>
               <TotalEarning />
             </Grid>
@@ -103,9 +103,9 @@ const Dashboard = () => {
              <Grid item xs={12} md={12} lg={8}>
               <RecentlyAddeddProducts />
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
+            {/* <Grid item xs={12} md={6} lg={4}>
               <SalesOverTime/>
-            </Grid>
+            </Grid> */}
            
             <Grid item xs={12}>
               <CustomersTable />
