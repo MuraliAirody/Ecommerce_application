@@ -50,70 +50,72 @@ public class PaymentController {
 					throws RazorpayException, UserException, OrderException {
 		
 		Order order=orderService.findOrderById(orderId);
-		 try {
-		      // Instantiate a Razorpay client with your key ID and secret
-		      RazorpayClient razorpay = new RazorpayClient(apiKey, apiSecretKey);
 
-		      // Create a JSON object with the payment link request parameters
-		      JSONObject paymentLinkRequest = new JSONObject();
-		      paymentLinkRequest.put("amount",order.getTotalPrice()* 100);
-		      paymentLinkRequest.put("currency","INR");    
+		System.out.println("order: "+order.getId());
+        try {
+// Instantiate a Razorpay client with your key ID and secret
+            RazorpayClient razorpay = new RazorpayClient(apiKey, apiSecretKey);
+
+// Create a JSON object with the payment link request parameters
+            JSONObject paymentLinkRequest = new JSONObject();
+            paymentLinkRequest.put("amount", order.getTotalDiscountedPrice()*100);
+            paymentLinkRequest.put("currency", "INR");
 //		      paymentLinkRequest.put("expire_by",1691097057);
 //		      paymentLinkRequest.put("reference_id",order.getId().toString());
-		     
 
-		      // Create a JSON object with the customer details
-		      JSONObject customer = new JSONObject();
-		      customer.put("name",order.getUser().getFirstName()+" "+order.getUser().getLastName());
-		      customer.put("contact",order.getUser().getMobile());
-		      customer.put("email",order.getUser().getEmail());
-		      paymentLinkRequest.put("customer",customer);
 
-		      // Create a JSON object with the notification settings
-		      JSONObject notify = new JSONObject();
-		      notify.put("sms",true);
-		      notify.put("email",true);
-		      paymentLinkRequest.put("notify",notify);
+// Create a JSON object with the customer details
+            JSONObject customer = new JSONObject();
+            customer.put("name", order.getUser().getFirstName() + " " + order.getUser().getLastName());
+//            customer.put("contact", order.getUser().getMobile());
+            customer.put("email", order.getUser().getEmail());
+            paymentLinkRequest.put("customer", customer);
 
-		      // Set the reminder settings
-		      paymentLinkRequest.put("reminder_enable",true);
+// Create a JSON object with the notification settings
+            JSONObject notify = new JSONObject();
+            notify.put("sms", true);
+            notify.put("email", true);
+            paymentLinkRequest.put("notify", notify);
 
-		      // Set the callback URL and method
-		      paymentLinkRequest.put("callback_url","http://localhost:3000/payment/"+orderId);
-		      paymentLinkRequest.put("callback_method","get");
+// Set the reminder settings
+            paymentLinkRequest.put("reminder_enable", true);
 
-		      // Create the payment link using the paymentLink.create() method
-		      PaymentLink payment = razorpay.paymentLink.create(paymentLinkRequest);
-		      
-		      String paymentLinkId = payment.get("id");
-		      String paymentLinkUrl = payment.get("short_url");
-		      
-		      PaymentLinkResponse res=new PaymentLinkResponse(paymentLinkUrl,paymentLinkId);
-		      
-		      PaymentLink fetchedPayment = razorpay.paymentLink.fetch(paymentLinkId);
+// Set the callback URL and method
+            paymentLinkRequest.put("callback_url", "http://localhost:3000/payment/" + orderId);
+            paymentLinkRequest.put("callback_method", "get");
 
-		      order.setOrderId(fetchedPayment.get("order_id"));
-		      orderRepository.save(order);
-		      
-		   // Print the payment link ID and URL
-		      System.out.println("Payment link ID: " + paymentLinkId);
-		      System.out.println("Payment link URL: " + paymentLinkUrl);
-		      System.out.println("Order Id : "+fetchedPayment.get("order_id")+fetchedPayment);
-		      
-		      return new ResponseEntity<PaymentLinkResponse>(res,HttpStatus.ACCEPTED);
-		      
-		    } catch (RazorpayException e) {
-		    	
-		      System.out.println("Error creating payment link: " + e.getMessage());
-		      throw new RazorpayException(e.getMessage());
-		    }
-		
-		
+// Create the payment link using the paymentLink.create() method
+            PaymentLink payment = razorpay.paymentLink.create(paymentLinkRequest);
+
+            String paymentLinkId = payment.get("id");
+            String paymentLinkUrl = payment.get("short_url");
+
+            PaymentLinkResponse res = new PaymentLinkResponse(paymentLinkUrl, paymentLinkId);
+
+            PaymentLink fetchedPayment = razorpay.paymentLink.fetch(paymentLinkId);
+
+            order.setOrderId(fetchedPayment.get("id"));
+            orderRepository.save(order);
+
+// Print the payment link ID and URL
+            System.out.println("Payment link ID: " + paymentLinkId);
+            System.out.println("Payment link URL: " + paymentLinkUrl);
+            System.out.println("Order Id : " + fetchedPayment.get("order_id") + fetchedPayment);
+
+            return new ResponseEntity<PaymentLinkResponse>(res, HttpStatus.CREATED);
+
+        } catch (RazorpayException e) {
+
+            System.out.println("Error creating payment link: " + e.getMessage());
+            throw new RazorpayException(e.getMessage());
+        }
+
+
 //		order_id
 	}
 	
-  @GetMapping("/payments")
-  public ResponseEntity<ApiResponse> redirect(@RequestParam(name="payment_id") String paymentId, @RequestParam("order_id")Long orderId) throws RazorpayException, OrderException {
+  @GetMapping("/payments/{order_id}")
+  public ResponseEntity<ApiResponse> redirect(@RequestParam(name="razorpay_payment_id") String paymentId, @PathVariable("order_id")Long orderId) throws RazorpayException, OrderException {
 	  RazorpayClient razorpay = new RazorpayClient(apiKey, apiSecretKey);
 	  Order order =orderService.findOrderById(orderId);
 	

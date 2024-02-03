@@ -8,6 +8,7 @@ import { getOrderById } from "../../../redux/customer/order/action";
 import AddressCard from "../AddressCard/AddressCard";
 import { useParams } from "react-router-dom";
 import OrderTracker from '../Order/OrderTracker'
+import { GET_ORDER_BY_ID_FAILURE } from "../../../redux/customer/order/actionType";
 
 const PaymentSuccess = () => {
   // razorpay_payment_link_reference_id
@@ -15,8 +16,8 @@ const PaymentSuccess = () => {
   const [paymentId, setPaymentId] = useState("");
   const [referenceId, setReferenceId] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("");
-  const { orderId } = useParams();
-
+  const { orderID } = useParams();
+  console.log("orderId ",orderID)
   const jwt = localStorage.getItem("jwt");
   const dispatch = useDispatch();
   const order = useSelector((store) => store.order);
@@ -24,7 +25,7 @@ const PaymentSuccess = () => {
   console.log("order details for payment: ",order?.order)
 
   useEffect(() => {
-    console.log("orderId", orderId);
+    console.log("orderId", orderID);
     const urlParams = new URLSearchParams(window.location.search);
     setPaymentId(urlParams.get("razorpay_payment_id"));
     setReferenceId(urlParams.get("razorpay_payment_link_reference_id"));
@@ -33,11 +34,11 @@ const PaymentSuccess = () => {
 
   useEffect(() => {
     if (paymentId && paymentStatus === "paid") {
-      const data = { orderId, paymentId, jwt };
+      const data = { orderID, paymentId, jwt };
       dispatch(updatePayment(data));
-      dispatch(getOrderById(orderId));
+      dispatch(getOrderById(orderID));
     }
-  }, [orderId, paymentId]);
+  }, [orderID, paymentId]);
 
   return (
     <div className="px-2 lg:px-36">
@@ -55,8 +56,9 @@ const PaymentSuccess = () => {
       <OrderTracker activeStep={1}/>
 
       <Grid container className="space-y-5 py-5 pt-20">
-        {order.order?.orderItems.map((item) => (
+        {order?.order?.orderItems?.map((item) => (
           <Grid
+          key={item.id}
             container
             item
             className="shadow-xl rounded-md p-5 border"
