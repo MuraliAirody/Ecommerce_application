@@ -10,9 +10,9 @@ export default function LoginForm({ handleNext }) {
   const navigate = useNavigate();
   const dispatch=useDispatch();
   const jwt=localStorage.getItem("jwt");
-//   const [openSnackBar,setOpenSnackBar]=useState(false);
+  const [openSnackBar,setOpenSnackBar]=useState(false);
   const auth  = useSelector((store) => store.auth);
-//   const handleCloseSnackbar=()=>setOpenSnackBar(false);
+  const handleCloseSnackbar=()=>setOpenSnackBar(false);
   useEffect(()=>{
     if(jwt){
       dispatch(getUser(jwt))
@@ -21,9 +21,12 @@ export default function LoginForm({ handleNext }) {
   },[jwt])
   
   
-    // useEffect(() => {
-    //   if (auth.user || auth.error) setOpenSnackBar(true)
-    // }, [auth.user]);
+    useEffect(() => {
+      console.log(auth.user," ",auth.error)
+      if (auth.user || auth.error) {
+        console.log("open snack bar");
+        setOpenSnackBar(true)}
+    }, [auth.user,auth.error]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -86,12 +89,13 @@ export default function LoginForm({ handleNext }) {
           Register
         </Button>
         </div>
-      </div>
-      {/* <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
           {auth.error?auth.error:auth.user?"Register Success":""}
         </Alert>
-      </Snackbar> */}
+      </Snackbar>
+      </div>
+      
     </React.Fragment>
   );
 }

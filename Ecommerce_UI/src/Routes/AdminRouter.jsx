@@ -6,7 +6,6 @@ import {
 import AdminPanel from "../admin/AdminPanel";
 
 
-
 function AdminRouter() {
   return (
     <div>

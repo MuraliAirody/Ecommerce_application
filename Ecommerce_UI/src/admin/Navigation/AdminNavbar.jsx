@@ -173,7 +173,7 @@ export default function AdminNavbar({handleSideBarViewInMobile}) {
           >
             <MenuIcon />
           </IconButton>}
-          <Avatar alt="Zosh" src="https://res.cloudinary.com/ddkso1wxi/image/upload/v1675919455/Logo/Copy_of_Zosh_Academy_nblljp.png" />
+          <Avatar alt="NT" src="https://static.vecteezy.com/system/resources/previews/003/739/693/non_2x/nt-logo-monogram-isolated-on-circle-element-design-template-free-vector.jpg" />
           <Search>
             <SearchIconWrapper>
               <SearchIcon />

@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 import com.ecommerce.exception.ProductException;
 import com.ecommerce.modal.Category;
 import com.ecommerce.modal.Product;
-import com.ecommerce.repository.CategoryRepository;
-import com.ecommerce.repository.ProductRepository;
+import com.ecommerce.repository.*;
 import com.ecommerce.request.CreateProductRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +26,11 @@ public class ProductServiceImplementation implements ProductService {
 	private ProductRepository productRepository;
 	private UserService userService;
 	private CategoryRepository categoryRepository;
-	
+
+	@Autowired
+	CartItemRepository cartItemRepository;
+	@Autowired
+	OrderItemRepository orderItemRepository;
 	public ProductServiceImplementation(ProductRepository productRepository,UserService userService,CategoryRepository categoryRepository) {
 		this.productRepository=productRepository;
 		this.userService=userService;
@@ -97,7 +101,9 @@ public class ProductServiceImplementation implements ProductService {
 	public String deleteProduct(Long productId) throws ProductException {
 		
 		Product product=findProductById(productId);
-		
+		cartItemRepository.deleteByProduct(product);
+		orderItemRepository.deleteByProduct(product);
+
 		System.out.println("delete product "+product.getId()+" - "+productId);
 		product.getSizes().clear();
 //		productRepository.save(product);

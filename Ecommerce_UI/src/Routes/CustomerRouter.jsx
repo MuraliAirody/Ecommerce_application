@@ -16,6 +16,7 @@ import Order from "../customer/components/Order/Order";
 import OrderDetail from "../customer/components/Order/OrderDetail";
 import PaymentSuccess from "../customer/components/paymentSuccess/PaymentSuccess";
 import RateProduct from "../customer/components/ReviewProduct/RateProduct";
+import NotFound from "../pages/Notfound";
 
 function CustomerRouter() {
   console.log("user routes");
@@ -34,6 +35,7 @@ function CustomerRouter() {
           <Route path="/account/order/:orderID" element={<OrderDetail></OrderDetail>}></Route>
           <Route path="/payment/:orderID" element={<PaymentSuccess></PaymentSuccess>}></Route>
           <Route path="/account/rate/:productId" element={<RateProduct />}></Route>
+          <Route path="*" element={<NotFound />}></Route>
         </Route>
       </Routes>
     </>

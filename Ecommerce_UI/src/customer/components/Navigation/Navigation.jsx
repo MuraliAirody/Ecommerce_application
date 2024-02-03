@@ -30,7 +30,7 @@ export default function Navigation() {
   const openUserMenu = Boolean(anchorEl);
   const jwt = localStorage.getItem("jwt");
   const location = useLocation();
-
+  const cart = useSelector(store => store.cart)
   useEffect(() => {
     if (jwt) {
       dispatch(getUser(jwt));
@@ -186,7 +186,14 @@ export default function Navigation() {
                             >
                               {section.items.map((item) => (
                                 <li key={item.name} className="flow-root">
-                                  <p className="-m-2 block p-2 text-gray-500">
+                                  <p className="-m-2 block p-2 text-gray-500"  onClick={() =>
+                                  handleCategoryClick(
+                                    category,
+                                    section,
+                                    item,
+                                    close
+                                  )
+                                }>
                                     {item.name}
                                   </p>
                                 </li>
@@ -282,7 +289,7 @@ export default function Navigation() {
                         aria-hidden="true"
                       />
                       <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                        {/* {cart.cart?.totalItem} */}
+                        {cart.cart?.totalItem}
                       </span>
                       <span className="sr-only">items in cart, view bag</span>
                     </Button>
@@ -316,8 +323,8 @@ export default function Navigation() {
                 <Link to="/">
                   <span className="sr-only">Your Company</span>
                   <img
-                    src="https://res.cloudinary.com/ddkso1wxi/image/upload/v1675919455/Logo/Copy_of_Zosh_Academy_nblljp.png"
-                    alt="Shopwithzosh"
+                    src="https://static.vecteezy.com/system/resources/previews/003/739/693/non_2x/nt-logo-monogram-isolated-on-circle-element-design-template-free-vector.jpg"
+                    alt="NT"
                     className="h-8 w-8 mr-2"
                   />
                 </Link>
@@ -533,8 +540,8 @@ export default function Navigation() {
                       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      {/* {cart.cart?.totalItem} */}
+                    <span className="ml-2 text-sm font-medium text-red-700 group-hover:text-gray-800">
+                      {cart.cart?.totalItem}
                     </span>
                     <span className="sr-only">items in cart, view bag</span>
                   </Button>
