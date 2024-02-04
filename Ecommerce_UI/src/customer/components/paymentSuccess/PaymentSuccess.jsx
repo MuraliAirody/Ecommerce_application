@@ -8,7 +8,6 @@ import { getOrderById } from "../../../redux/customer/order/action";
 import AddressCard from "../AddressCard/AddressCard";
 import { useParams } from "react-router-dom";
 import OrderTracker from '../Order/OrderTracker'
-import { GET_ORDER_BY_ID_FAILURE } from "../../../redux/customer/order/actionType";
 
 const PaymentSuccess = () => {
   // razorpay_payment_link_reference_id
